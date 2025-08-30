@@ -1,11 +1,11 @@
 entryPoints:
   web:
     address: ":80"
-    # http:
-    #   redirections:
-    #     entryPoint:
-    #       to: websecure
-    #       scheme: https
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
 
   websecure:
     address: ":443"
@@ -21,3 +21,6 @@ certificatesResolvers:
 providers:
   docker:
     exposedByDefault: false
+
+log:
+  level: INFO
