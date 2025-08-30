@@ -24,3 +24,8 @@ providers:
 
 log:
   level: INFO
+
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+  bufferingSize: 100  # optional: for performance, batches log lines
+  format: json        # or "common"  
