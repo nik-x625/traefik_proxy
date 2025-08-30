@@ -21,6 +21,7 @@ certificatesResolvers:
 providers:
   docker:
     exposedByDefault: false
+    network: web
 
 log:
   level: INFO
