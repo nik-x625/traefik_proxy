@@ -12,11 +12,15 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./acme.json:/letsencrypt/acme.json
+    restart: unless-stopped
     networks:
       - web
+      - internal
 
 networks:
   web:
     external: true
+  internal:
+    internal: true
 
 
