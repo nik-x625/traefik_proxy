@@ -18,6 +18,11 @@ certificatesResolvers:
       httpChallenge:
         entryPoint: web
 
+
+api:
+  dashboard: true
+  insecure: false   # keep false for security
+
 providers:
   docker:
     exposedByDefault: false
@@ -27,6 +32,6 @@ log:
   level: INFO
 
 accessLog:
-  filePath: "/var/log/traefik/access.log"
+  filePath: "/opt/logs/access.log"
   bufferingSize: 100  # optional: for performance, batches log lines
-  format: json        # or "common"  
+  format: json        # or "common"  or "json"

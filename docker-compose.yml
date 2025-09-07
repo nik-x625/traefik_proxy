@@ -3,15 +3,33 @@ services:
     image: traefik:v3.1
     container_name: traefik
     command:
+      - --api=true
       - --api.dashboard=true
-      - --api.insecure=false
+      #- --api.insecure=true #- commented out to not export to 8080 - for security reasons
+
+      - --certificatesresolvers.letsencrypt.acme.email=mabolfathi@gmail.com
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web      
     ports:
       - "80:80"
       - "443:443"
+      #- "8080:8080" # for the dashboard - commented out to not export to 8080 - for security reasons
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./acme.json:/letsencrypt/acme.json
+      - ./logs:/opt/logs
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`proxy.qlines.net`) && (PathPrefix(`/dashboard/`) || PathPrefix(`/api`))"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=traefik-auth"
+
+
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${BASIC_AUTH_USER}"
     restart: unless-stopped
     networks:
       - web
